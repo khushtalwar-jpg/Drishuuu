@@ -12,24 +12,37 @@ body{
     margin:0;
     height:100vh;
     overflow:hidden;
-    background: radial-gradient(circle at top, #ff9a9e, #fad0c4, #fad0c4);
     display:flex;
     align-items:center;
     justify-content:center;
     font-family:'Comic Sans MS', cursive;
+    background: 
+        linear-gradient(rgba(255,154,158,0.6), rgba(250,208,196,0.6)),
+        url('girl.jpg') center/cover no-repeat fixed;
+    backdrop-filter: blur(2px);
+}
+
+/* Dark overlay for readability */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.25);
+    z-index:0;
 }
 
 /* UI Card */
 .card{
-    background:white;
+    background:rgba(255,255,255,0.95);
     padding:25px 20px;
     border-radius:25px;
     width:100%;
     max-width:390px;
     text-align:center;
-    box-shadow:0 0 30px rgba(0,0,0,0.3);
+    box-shadow:0 0 30px rgba(0,0,0,0.4);
     z-index:5;
     animation:pop .6s ease;
+    backdrop-filter: blur(4px);
 }
 
 @keyframes pop{
@@ -66,6 +79,7 @@ button{
     font-size:20px;
     animation:fall linear forwards;
     pointer-events:none;
+    z-index:1;
 }
 @keyframes fall{
     to{transform:translateY(110vh);opacity:0;}
@@ -78,6 +92,7 @@ button{
     border-radius:50%;
     background:#ff1a75;
     animation:boom 1s ease-out forwards;
+    z-index:10;
 }
 @keyframes boom{
     to{
