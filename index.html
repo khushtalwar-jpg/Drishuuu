@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love System Online 💘</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+    margin:0;
+    height:100vh;
+    overflow:hidden;
+    background: radial-gradient(circle at top, #ff9a9e, #fad0c4, #fad0c4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Comic Sans MS', cursive;
+}
+
+/* UI Card */
+.card{
+    background:white;
+    padding:25px 20px;
+    border-radius:25px;
+    width:100%;
+    max-width:390px;
+    text-align:center;
+    box-shadow:0 0 30px rgba(0,0,0,0.3);
+    z-index:5;
+    animation:pop .6s ease;
+}
+
+@keyframes pop{
+    from{transform:scale(.6);opacity:0;}
+    to{transform:scale(1);opacity:1;}
+}
+
+h1{color:#ff1a75;font-size:1.5rem;margin-bottom:15px;}
+
+.buttons{position:relative;height:140px;}
+
+button{
+    padding:12px 22px;
+    border:none;
+    border-radius:12px;
+    font-size:1rem;
+    cursor:pointer;
+}
+
+#yes{background:#ff1a75;color:white;}
+#no{
+    background:#222;color:white;
+    position:absolute;
+    right:10px;
+    top:0;
+}
+
+#msg{margin-top:10px;color:#ff1a75;min-height:22px;}
+
+/* Hearts */
+.heart{
+    position:fixed;
+    top:-10px;
+    font-size:20px;
+    animation:fall linear forwards;
+    pointer-events:none;
+}
+@keyframes fall{
+    to{transform:translateY(110vh);opacity:0;}
+}
+
+/* Fireworks */
+.spark{
+    position:fixed;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:#ff1a75;
+    animation:boom 1s ease-out forwards;
+}
+@keyframes boom{
+    to{
+        transform:translate(var(--x),var(--y));
+        opacity:0;
+    }
+}
+
+/* Fake GPS */
+.gps{
+    position:fixed;
+    top:10px;
+    background:black;
+    color:#00ffcc;
+    font-size:12px;
+    padding:6px 10px;
+    border-radius:8px;
+    font-family:monospace;
+    z-index:10;
+}
+
+/* Fake system popup */
+.popup{
+    position:fixed;
+    bottom:20px;
+    background:black;
+    color:#00ffcc;
+    padding:8px 12px;
+    border-radius:10px;
+    font-size:12px;
+    font-family:monospace;
+    animation:slide .4s ease;
+    z-index:10;
+}
+@keyframes slide{
+    from{transform:translateY(40px);opacity:0;}
+    to{transform:translateY(0);opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 Music -->
+<audio id="bgMusic" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2c02e4c6b3.mp3?filename=romantic-piano-112194.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card" id="card">
+    <h1>Will you be my Valentine? 😳💖</h1>
+
+    <div class="buttons">
+        <button id="yes" onclick="yesClick()">Yes 😍</button>
+        <button id="no" ontouchstart="moveNo()" onmouseenter="moveNo()">No 😏</button>
+    </div>
+
+    <p id="msg"></p>
+</div>
+
+<script>
+const funnyTexts=[
+"Aww come on 😜","Nice try 😏","Option disabled ❌",
+"System override 😈","Wrong choice 😂","Not allowed 🚫",
+"Think again 😌","Nope 😝"
+];
+
+const compliments=[
+"You're my favorite notification 💕",
+"You're the reason my smile exists 😘",
+"My heart literally chose you ❤️",
+"You’re my best decision ever 💖",
+"You’re my forever vibe 😍",
+"You're my love language 💘"
+];
+
+function moveNo(){
+    const noBtn=document.getElementById("no");
+    const box=document.querySelector(".buttons");
+
+    const maxX=box.clientWidth-noBtn.offsetWidth;
+    const maxY=box.clientHeight-noBtn.offsetHeight;
+
+    noBtn.style.left=Math.random()*maxX+"px";
+    noBtn.style.top=Math.random()*maxY+"px";
+
+    document.getElementById("msg").innerText=
+        funnyTexts[Math.floor(Math.random()*funnyTexts.length)];
+
+    if(navigator.vibrate) navigator.vibrate(60);
+    fakePopup();
+}
+
+function yesClick(){
+    document.getElementById("card").innerHTML=`
+        <h1>LOVE ACCEPTED 💍❤️</h1>
+        <h2>${compliments[Math.floor(Math.random()*compliments.length)]}</h2>
+        <p>Valentine Protocol Activated 😎💘</p>
+        <button onclick="share()">Share 😏📤</button>
+    `;
+    fireworks();
+}
+
+/* Hearts rain */
+setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerText="💖";
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=(3+Math.random()*3)+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+},250);
+
+/* Fireworks */
+function fireworks(){
+    for(let i=0;i<80;i++){
+        const s=document.createElement("div");
+        s.className="spark";
+        s.style.left="50vw";
+        s.style.top="50vh";
+        s.style.setProperty("--x",(Math.random()*400-200)+"px");
+        s.style.setProperty("--y",(Math.random()*400-200)+"px");
+        document.body.appendChild(s);
+        setTimeout(()=>s.remove(),1000);
+    }
+}
+
+/* Fake GPS tracker */
+setInterval(()=>{
+    const gps=document.createElement("div");
+    gps.className="gps";
+    gps.innerText="📍 Tracking Love Location... " + 
+    (Math.random()*90).toFixed(3)+"°N, "+(Math.random()*180).toFixed(3)+"°E";
+    document.body.appendChild(gps);
+    setTimeout(()=>gps.remove(),1500);
+},5000);
+
+/* Fake popup */
+function fakePopup(){
+    const p=document.createElement("div");
+    p.className="popup";
+    p.innerText=">>> System: NO button locked 😈";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1400);
+}
+
+/* Share */
+function share(){
+    if(navigator.share){
+        navigator.share({
+            title:"She said YES 😍",
+            text:"She accepted Valentine Protocol 💘😎",
+            url:location.href
+        });
+    }else{
+        alert("Copy link and flex 😏💖");
+    }
+}
+
+/* 🎵 Mobile autoplay */
+document.body.addEventListener('touchstart',()=>{
+    document.getElementById("bgMusic").play().catch(()=>{});
+},{once:true});
+
+document.body.addEventListener('click',()=>{
+    document.getElementById("bgMusic").play().catch(()=>{});
+},{once:true});
+</script>
+
+</body>
+</html>
